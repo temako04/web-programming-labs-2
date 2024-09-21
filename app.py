@@ -120,4 +120,7 @@ def camry():
 @app.route('/lab2/example')
 def example():
     name = 'Конкин Артём'
-    return render_template('example.html', name=name)
+    group = 'ФБИ-23'
+    lab_num = '2'
+    kurs = '3 курс'
+    return render_template('example.html', name=name, group=group, kurs=kurs, lab_num=lab_num)
