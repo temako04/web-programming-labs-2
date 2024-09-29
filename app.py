@@ -118,14 +118,6 @@ def camry():
 </html>
 '''
 
-@app.route('/lab2/a')
-def a():
-    return 'ok'
-
-@app.route('/lab2/a/')
-def a1():
-    return 'ok'
-
 flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
 
 @app.route('/lab2/flowers/<int:flower_id>')
@@ -164,3 +156,7 @@ def example():
         {'name': 'Манго', 'price': 321}
     ]
     return render_template('example.html', name=name, group=group, kurs=kurs, lab_num=lab_num, fruits=fruits)
+
+@app.route('/lab2/')
+def lab2():
+    return render_template('lab2.html')
