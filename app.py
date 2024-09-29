@@ -117,6 +117,16 @@ def camry():
     </body>
 </html>
 '''
+
+@app.route('/lab2/a')
+def a():
+    return 'ok'
+
+@app.route('/lab2/a/')
+def a1():
+    return 'ok'
+
+
 @app.route('/lab2/example')
 def example():
     name = 'Конкин Артём'
