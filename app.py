@@ -118,29 +118,6 @@ def camry():
 </html>
 '''
 
-flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
-
-@app.route('/lab2/flowers/<int:flower_id>')
-def flowers(flower_id):
-    if flower_id >= len(flower_list):
-        return 'Такого цветка нет', 404
-    else:
-        return 'Цветок: ' + flower_list[flower_id]
-
-@app.route('/lab2/add_flower/<name>')
-def add_flower(name):
-    flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p>Название нового цветка: {name} </p>
-    <p>Всего цветов: {len(flower_list)}</p>
-    <p>Полный список: {flower_list}</p>
-    </body>
-</html> 
-'''
 
 @app.route('/lab2/example')
 def example():
@@ -155,7 +132,19 @@ def example():
         {'name': 'Мандарины', 'price': 95},
         {'name': 'Манго', 'price': 321}
     ]
-    return render_template('example.html', name=name, group=group, kurs=kurs, lab_num=lab_num, fruits=fruits)
+    books = [
+        {'name': '1984', 'author': 'Джордж Оруэл', 'genre': 'Дистопия', 'list':'328'},
+        {'name': 'Убить пересмешника', 'author': 'Харпер Ли', 'genre': 'Роман', 'list':'281'},
+        {'name': 'Мастер и Маргарита', 'author': 'Михаил Булгаков', 'genre': 'Фантастика', 'list':'448'},
+        {'name': 'Гарри Поттер и философский камень', 'author': 'Дж.К. Роулинг', 'genre': 'Фэнтези', 'list':'223'},
+        {'name': 'Преступление и наказание', 'author': 'Фёдор Достоевский', 'genre': 'Роман', 'list':'430'},
+        {'name': 'Великий Гэтсби', 'author': 'Фрэнсис Скотт', 'genre': 'Роман', 'list':'180'},
+        {'name': 'Анна Каренина', 'author': 'Лев Толстой', 'genre': 'Роман', 'list':'864'},
+        {'name': 'Сияние', 'author': 'Стивен Кинг', 'genre': 'Ужасы', 'list':'447'},
+        {'name': '451 градус по Фаренгейту', 'author': 'Рэй Брэдбери', 'genre': 'Научная фантастика', 'list':'158'},
+        {'name': 'Маленький принц', 'author': 'Антуан де Сент-Экзюпери', 'genre': 'Роман', 'list':'96'}
+    ]
+    return render_template('example.html', name=name, group=group, kurs=kurs, lab_num=lab_num, fruits=fruits,books=books)
 
 @app.route('/lab2/')
 def lab2():

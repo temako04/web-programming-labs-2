@@ -29,6 +29,12 @@
             <li>{{ loop.index }} - {{ f.name }}: {{ f.price }} &#8381;</li>
             {% endfor %}
         </ul>
+
+        <ul>
+            {% for f in books %}
+            <li>{{ loop.index }} - {{ f.name }}, {{ f.author }}, {{ f.genre }}, {{ f.list }}</li>
+            {% endfor %}
+        </ul>
     </main>
 
     <footer>
