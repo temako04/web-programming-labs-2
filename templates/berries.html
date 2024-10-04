@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{# основой контент: #}
+{% block main %}
+<h1>Ягоды</h1>
+    <div class="berry-item">
+        <img src="{{ url_for('static', filename='КЛУБНИКА.jpg') }}" class="berry-image">
+        <p>Клубника — сладкая и сочная ягода, популярная в десертах и салатах.</p>
+    </div>
+    <div class="berry-item">
+        <img src="{{ url_for('static', filename='ЗЕМЛЯНИКА.jpg') }}" class="berry-image">
+        <p>Земляника — мелкая, но очень ароматная ягода, которая растёт в лесах.</p>
+    </div>
+    <div class="berry-item">
+        <img src="{{ url_for('static', filename='ГОЛУБИКА.jpg') }}" class="berry-image">
+        <p>Голубика — полезная ягода, богатая витаминами и антиоксидантами.</p>
+    </div>
+    <div class="berry-item">
+        <img src="{{ url_for('static', filename='МАЛИНА.jpg') }}" class="berry-image">
+        <p>Малина — сладкая ягода с характерным кисловатым вкусом, отлично подходит для варенья.</p>
+    </div>
+    <div class="berry-item">
+        <img src="{{ url_for('static', filename='БРУСНИКА.jpg') }}" class="berry-image">
+        <p>Брусника — кисловатая ягода, часто используется в традиционной медицине и кулинарии.</p>
+    </div>
+
+<style>
+    .berry-item {
+        text-align: center;
+    }
+    .berry-image {
+        width: 150px;
+        height: 150px;
+    }
+</style>
+{% endblock %}
