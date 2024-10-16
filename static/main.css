@@ -29,3 +29,18 @@ footer {
     margin-top: 5px;
     display: block;
 }
+
+.drinks {
+    border: 2px solid greenyellow;
+    border-radius: 20px;
+    padding: 10px;
+    margin: auto;
+    background-color: rgb(225, 240, 171);
+}
+.pay {
+    border: 2px solid greenyellow;
+    border-radius: 20px;
+    padding: 10px;
+    margin: auto;
+    background-color: rgb(225, 240, 171);
+}
