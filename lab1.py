@@ -14,7 +14,7 @@ def lab():
 <html>
     <head>
         <title>Лабораторная работа 1</title>
-        <link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1.css') + '''">
+        <link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     </head>
     <body>
         <header>
@@ -44,10 +44,10 @@ def oak():
     return '''
 <!doctype html>
 <html>
-<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1.css') + '''">
+<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     <body>
         <h1>Дуб</h1>
-        <img src="''' + url_for('static', filename='oak.jpg') + '''">
+        <img src="''' + url_for('static', filename='lab1/oak.jpg') + '''">
     </body>
 </html>
 '''
@@ -58,10 +58,10 @@ def student():
     return '''
 <!doctype html>
 <html>
-<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1.css') + '''">
+<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     <body>
         <h1>Конкин Артём Константинович</h1>
-        <img src="''' + url_for('static', filename='ngtu.jpg') + '''">
+        <img src="''' + url_for('static', filename='lab1/ngtu.jpg') + '''">
     </body>
 </html>
 '''
@@ -72,12 +72,12 @@ def python():
     return '''
 <!doctype html>
 <html>
-<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1.css') + '''">
+<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     <body>
         <h1>Python — это высокоуровневый язык программирования, отличающийся эффективностью, простотой и универсальностью использования.</h1>
         <h1>Он широко применяется в разработке веб-приложений и прикладного программного обеспечения, а также в машинном обучении и обработке больших данных.</h1>
         <h1>За счет простого и интуитивно понятного синтаксиса является одним из распространенных языков для обучения программированию.</h1>
-        <img src="''' + url_for('static', filename='python.png') + '''">
+        <img src="''' + url_for('static', filename='lab1/python.png') + '''">
     </body>
 </html>
 '''
@@ -88,13 +88,13 @@ def camry():
     return '''
 <!doctype html>
 <html>
-<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1.css') + '''">
+<link rel="stylesheet" type="text/css" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
     <body>
         <h1>Toyota Camry — это один из самых популярных среднеразмерных седанов, производимых японским автопроизводителем Toyota.</h1>
         <h1>С момента своего запуска в 1982 году, Camry завоевала признание за надежность, долговечность и высокий уровень комфорта.</h1>
         <h1>Модель отличается элегантным дизайном и современными технологиями, что делает её привлекательным выбором как для
         городских поездок, так и для длительных путешествий.</h1>
-        <img src="''' + url_for('static', filename='camry.jpg') + '''">
+        <img src="''' + url_for('static', filename='lab1/camry.jpg') + '''">
     </body>
 </html>
 '''

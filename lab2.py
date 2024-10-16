@@ -27,14 +27,14 @@ def example():
         {'name': '451 градус по Фаренгейту', 'author': 'Рэй Брэдбери', 'genre': 'Научная фантастика', 'list':'158'},
         {'name': 'Маленький принц', 'author': 'Антуан де Сент-Экзюпери', 'genre': 'Роман', 'list':'96'}
     ]
-    return render_template('example.html', name=name, group=group, kurs=kurs, lab_num=lab_num, fruits=fruits,books=books)
+    return render_template('lab2/example.html', name=name, group=group, kurs=kurs, lab_num=lab_num, fruits=fruits,books=books)
 
 
 @lab2.route('/lab2/')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 
 @lab2.route('/lab2/berries')
 def berries():
-    return render_template('berries.html')
+    return render_template('lab2/berries.html')
