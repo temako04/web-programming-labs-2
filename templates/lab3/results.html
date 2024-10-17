@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска</h1>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} - {{ product.price }}₽ ({{ product.brand }}, {{ product.color }})</li>
+        {% else %}
+            <li>Нет товаров в заданном диапазоне цен.</li>
+        {% endfor %}
+    </ul>
+    <a href="/lab3/products">Вернуться к поиску</a>
+{% endblock %}

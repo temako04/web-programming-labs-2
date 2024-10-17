@@ -181,3 +181,42 @@ def del_cookie_2():
     resp.delete_cookie('fontsize')
     resp.delete_cookie('fontweight')
     return resp
+
+products = [
+    {'name': 'Samsung Galaxy S23', 'price': 74990, 'brand': 'Samsung', 'color': 'черный'},
+    {'name': 'Apple iPhone 14', 'price': 79990, 'brand': 'Apple', 'color': 'белый'},
+    {'name': 'Xiaomi 13', 'price': 59990, 'brand': 'Xiaomi', 'color': 'синий'},
+    {'name': 'OnePlus 11', 'price': 59990, 'brand': 'OnePlus', 'color': 'серый'},
+    {'name': 'Google Pixel 7', 'price': 64990, 'brand': 'Google', 'color': 'красный'},
+    {'name': 'Sony Xperia 1 IV', 'price': 89990, 'brand': 'Sony', 'color': 'зеленый'},
+    {'name': 'Huawei P50 Pro', 'price': 59990, 'brand': 'Huawei', 'color': 'черный'},
+    {'name': 'Oppo Find X5', 'price': 64990, 'brand': 'Oppo', 'color': 'белый'},
+    {'name': 'Vivo X80', 'price': 54990, 'brand': 'Vivo', 'color': 'синий'},
+    {'name': 'Realme GT 2 Pro', 'price': 49990, 'brand': 'Realme', 'color': 'серый'},
+    {'name': 'Asus ROG Phone 6', 'price': 79990, 'brand': 'Asus', 'color': 'красный'},
+    {'name': 'Motorola Edge 30', 'price': 32990, 'brand': 'Motorola', 'color': 'зеленый'},
+    {'name': 'Nokia X30', 'price': 27990, 'brand': 'Nokia', 'color': 'черный'},
+    {'name': 'Honor 70', 'price': 34990, 'brand': 'Honor', 'color': 'белый'},
+    {'name': 'ZTE Axon 20', 'price': 29990, 'brand': 'ZTE', 'color': 'синий'},
+    {'name': 'LG Velvet', 'price': 34990, 'brand': 'LG', 'color': 'серый'},
+    {'name': 'Tecno Camon 19', 'price': 19990, 'brand': 'Tecno', 'color': 'красный'},
+    {'name': 'Infinix Zero 5G', 'price': 24990, 'brand': 'Infinix', 'color': 'зеленый'},
+    {'name': 'Samsung Galaxy A54', 'price': 34990, 'brand': 'Samsung', 'color': 'черный'},
+    {'name': 'Apple iPhone SE (3rd Gen)', 'price': 39990, 'brand': 'Apple', 'color': 'белый'},
+]
+
+@lab3.route('/lab3/products')
+def index():
+    return render_template('lab3/products.html')
+
+@lab3.route('/lab3/results')
+def search():
+    min_price = request.args.get('min_price')
+    max_price = request.args.get('max_price')
+    
+    filtered_products = [
+        product for product in products
+        if int(min_price) <= product['price'] <= int(max_price)
+    ]
+    
+    return render_template('lab3/results.html', products=filtered_products)
