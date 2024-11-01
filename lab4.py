@@ -159,3 +159,48 @@ def fridge():
                 message = 'Ошибка: температура должна быть числом'
 
     return render_template('lab4/fridge.html', message=message)
+
+@lab4.route('/lab4/order_grain', methods=['GET', 'POST'])
+def order_grain():
+    message = ''
+    if request.method == 'POST':
+        grain_type = request.form.get('grain_type')
+        weight = request.form.get('weight')
+
+        prices = {
+            'ячмень': 12345,
+            'овёс': 8522,
+            'пшеница': 8722,
+            'рожь': 14111
+        }
+
+        if not weight:
+            message = 'Ошибка: не указан вес заказа.'
+        else:
+            try:
+                weight = float(weight)
+
+                if weight <= 0:
+                    message = 'Ошибка: вес должен быть больше 0.'
+                elif weight > 500:
+                    message = 'Ошибка: такого объёма сейчас нет в наличии.'
+                else:
+                    if grain_type in prices:
+                        total_cost = prices[grain_type] * weight
+                        discount = 0
+
+                        if weight > 50:
+                            discount = total_cost * 0.10  # 10% скидка
+                            total_cost -= discount
+                            discount_message = f' Применена скидка за большой объём: {discount:.2f} руб.'
+                        else:
+                            discount_message = ''
+
+                        message = (f'Заказ успешно сформирован. Вы заказали {grain_type}.\n'
+                                   f'Вес: {weight} т. Сумма к оплате: {total_cost:.2f} руб.{discount_message}')
+                    else:
+                        message = 'Ошибка: выбрано несуществующее зерно.'
+            except ValueError:
+                message = 'Ошибка: вес должен быть числом.'
+
+    return render_template('lab4/order_grain.html', message=message)
