@@ -3,12 +3,8 @@
 {% block lab %}Регистрация{% endblock %}
 
 {% block main %}
-    <h1>Регистрация</h1>
+    <h1>Регистрация нового пользователя</h1>
     <form method="post">
-        <div>
-            <label for="name">Имя:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
         <div>
             <label for="login">Логин:</label>
             <input type="text" id="login" name="login" required>
@@ -18,10 +14,21 @@
             <input type="password" id="password" name="password" required>
         </div>
         <div>
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="gender">Пол:</label>
+            <select id="gender" name="gender" required>
+                <option value="M">Мужской</option>
+                <option value="F">Женский</option>
+            </select>
+        </div>
+        <div>
             <button type="submit">Зарегистрироваться</button>
         </div>
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
     </form>
-    {% if message %}
-        <div style="color: blue; font-weight: bold;">{{ message }}</div>
-    {% endif %}
 {% endblock %}

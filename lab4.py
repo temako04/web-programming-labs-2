@@ -205,65 +205,71 @@ def order_grain():
 
     return render_template('lab4/order_grain.html', message=message)
 
-@lab4.route('/lab4/register', methods=['GET', 'POST'])
+@lab4.route("/lab4/register", methods=['GET', 'POST'])
 def register():
-    message = ''
-    if request.method == 'POST':
-        login = request.form.get('login')
-        password = request.form.get('password')
-        name = request.form.get('name')
+    if request.method == 'GET':
+        return render_template("lab4/register.html", error="")
 
-        if not login or not password or not name:
-            message = 'Ошибка: все поля обязательны для заполнения.'
-        else:
-            if any(user['login'] == login for user in users):
-                message = 'Ошибка: пользователь с таким логином уже существует.'
-            else:
-                users.append({'login': login, 'password': password, 'name': name})
-                message = 'Регистрация прошла успешно! Теперь вы можете войти.'
+    login = request.form.get('login')
+    password = request.form.get('password')
+    name = request.form.get('name')
+    gender = request.form.get('gender')
 
-    return render_template('lab4/register.html', message=message)
+    if not login or not password or not name or not gender:
+        error = "Все поля обязательны для заполнения."
+        return render_template("lab4/register.html", error=error)
 
+    if any(user['login'] == login for user in users):
+        error = "Пользователь с таким логином уже существует."
+        return render_template("lab4/register.html", error=error)
 
-@lab4.route('/lab4/users', methods=['GET'])
-def users_list():
-    if 'login' not in session:
-        return redirect('/lab4/login')
+    users.append({'login': login, 'password': password, 'name': name, 'gender': gender})
 
-    login = session['login']
-    user = next((user for user in users if user['login'] == login), None)
-    return render_template('lab4/users.html', users=users, authorized=True, name=user['name'])
-
-
-@lab4.route('/lab4/delete_user', methods=['POST'])
-def delete_user():
-    if 'login' not in session:
-        return redirect('/lab4/login')
-
-    login = session['login']
-    global users
-    users = [user for user in users if user['login'] != login]
-    session.pop('login', None)
+    session['login'] = login
     return redirect('/lab4/login')
 
 
-@lab4.route('/lab4/edit_user', methods=['GET', 'POST'])
+@lab4.route("/lab4/users", methods=['GET'])
+def user_list():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    current_login = session['login']
+    return render_template("lab4/users.html", users=users, current_login=current_login)
+
+
+@lab4.route("/lab4/delete_user", methods=['POST'])
+def delete_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+    
+    login_to_delete = request.form.get('login')
+
+    if session['login'] == login_to_delete:
+        global users
+        users = [user for user in users if user['login'] != login_to_delete]
+        session.pop('login', None)
+    return redirect('/lab4/login')
+
+
+@lab4.route("/lab4/edit_user", methods=['GET', 'POST'])
 def edit_user():
     if 'login' not in session:
         return redirect('/lab4/login')
 
     login = session['login']
-    user = next((user for user in users if user['login'] == login), None)
 
     if request.method == 'POST':
         new_name = request.form.get('name')
         new_password = request.form.get('password')
 
-        if new_name:
-            user['name'] = new_name
-        if new_password:
-            user['password'] = new_password
+        for user in users:
+            if user['login'] == login:
+                user['name'] = new_name if new_name else user['name']
+                user['password'] = new_password if new_password else user['password']
+                break
 
         return redirect('/lab4/users')
 
-    return render_template('lab4/edit_user.html', user=user)
+    user_data = next((user for user in users if user['login'] == login), None)
+    return render_template("lab4/edit_user.html", user=user_data)

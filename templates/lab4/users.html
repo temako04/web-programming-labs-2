@@ -4,16 +4,16 @@
 
 {% block main %}
     <h1>Список пользователей</h1>
-    <h2>Добро пожаловать, {{ name }}!</h2>
-    <ul>
-        {% for user in users %}
-            <li>{{ user.name }} ({{ user.login }})</li>
-        {% endfor %}
-    </ul>
-    <form action="/lab4/delete_user" method="post">
-        <button type="submit">Удалить себя из списка</button>
-    </form>
-    <form action="/lab4/edit_user" method="get">
-        <button type="submit">Редактировать свои данные</button>
-    </form>
+    {% for user in users %}
+    <div>
+        <p>Имя: {{ user.name }} -- Логин: {{ user.login }}</p>
+        {% if user.login == current_login %}
+            <form action="/lab4/delete_user" method="post">
+                <input type="hidden" name="login" value="{{ user.login }}">
+                <button type="submit">Удалить себя</button>
+            </form>
+            <p><a href="/lab4/edit_user">Редактировать</a></p>
+        {% endif %}
+    </div>
+{% endfor %}
 {% endblock %}
