@@ -23,7 +23,9 @@
             margin: 10px;
         }
     </style>
-    <h1>Добро пожаловать, {{ username or 'anonymous' }}</h1>
+    <h1>База знаний</h1>
+
+    <p>Пользователь: {{ login or 'anonymous' }}</p>
     
     <div class="buttons-container">
         <a href="/lab5/login" class="btn">Вход</a>
