@@ -6,6 +6,7 @@ import sqlite3
 from os import path
 from dotenv import load_dotenv
 lab5 = Blueprint('lab5', __name__)
+
 load_dotenv()
 
 @lab5.route('/lab5/')
@@ -22,7 +23,7 @@ def db_connect():
         )
         cur = conn.cursor(cursor_factory = RealDictCursor)
     else:
-        dir_path = path.dirhame(path.realpath(__file__))
+        dir_path = path.dirname(path.realpath(__file__))
         db_path = path.join(dir_path, "database.db")
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
