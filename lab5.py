@@ -63,7 +63,7 @@ def register():
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("INSERT INTO users (login, password) VALUES (%s, %s;", (login, password_hash))
     else:
-        cur.execute("INSERT INTO users (login, password) VALUES (?, ?);g", (login, password_hash))
+        cur.execute("INSERT INTO users (login, password) VALUES (?, ?);", (login, password_hash))
     
 
     db_close(conn,cur)
