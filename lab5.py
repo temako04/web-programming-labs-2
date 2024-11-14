@@ -138,7 +138,7 @@ def create():
             VALUES (?, ?, ?);", (login_id, title, article_text))
 
     db_close(conn,cur)
-    return redirect('/lab5/lab5')
+    return redirect('/lab5')
 
 @lab5.route('/lab5/list')
 def list():
