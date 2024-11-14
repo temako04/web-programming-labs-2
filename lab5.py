@@ -134,7 +134,7 @@ def create():
         cur.execute("INSERT INTO articles(login_id, title, article_text) \
             VALUES (%s, %s, %s);", (login_id, title, article_text))
     else:
-        cur.execute("INSERT INTO articles(login_id, title, aritcle_text) \
+        cur.execute("INSERT INTO articles(login_id, title, article_text) \
             VALUES (?, ?, ?);", (login_id, title, article_text))
 
     db_close(conn,cur)
