@@ -3,7 +3,7 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-    <h1>Статьи</h1>
+    <h1>Публичные статьи</h1>
 
     {% if articles %}
         {% for article in articles %}
@@ -12,12 +12,8 @@
             {% if article['is_favorite'] %}
                 <p><strong>Эта статья в избранном!</strong></p>
             {% endif %}
-            <div>
-                <a href="/lab5/edit/{{ article['id'] }}" class="btn">Редактировать</a>
-                <a href="/lab5/delete/{{ article['id'] }}" class="btn" onclick="return confirm('Вы уверены, что хотите удалить статью?')">Удалить</a>
-            </div>
         {% endfor %}
     {% else %}
-        <p>У вас нет статей.</p>
+        <p>Нет публичных статей.</p>
     {% endif %}
 {% endblock %}

@@ -9,12 +9,24 @@
         <div>
             <label>
                 Название статьи:
-                <input type="text" maxlength="50" name="title">
+                <input type="text" maxlength="50" name="title" required>
             </label>
         </div>
 
         <div>
-            <textarea name="article_text"></textarea>
+            <textarea name="article_text" required></textarea>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="is_favorite"> Любимая статья
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="is_public" checked> Публичная статья
+            </label>
         </div>
 
         <div>

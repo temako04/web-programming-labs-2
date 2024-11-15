@@ -110,9 +110,9 @@ def login():
 def success_login():
     return render_template('/lab5/success_login.html')
 
-@lab5.route('/lab5/create', methods =['GET','POST'])
+@lab5.route('/lab5/create', methods=['GET', 'POST'])
 def create():
-    login=session.get('login')
+    login = session.get('login')
     if not login:
         return redirect('/lab5/login')
 
@@ -121,49 +121,70 @@ def create():
 
     title = request.form.get('title')
     article_text = request.form.get('article_text')
+    is_favorite = 'is_favorite' in request.form 
+    is_public = 'is_public' in request.form 
 
     if not title or not article_text:
-        return render_template('lab5/create_article.html', error="Заполните все поля")
+        return render_template('lab5/create_article.html', error="Название и текст статьи обязательны.")
 
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT * FROM users WHERE login=%s;", (login, ))
+        cur.execute("SELECT id FROM users WHERE login=%s;", (login,))
     else:
-        cur.execute("SELECT * FROM users WHERE login=?;", (login, ))
+        cur.execute("SELECT id FROM users WHERE login=?;", (login,))
     login_id = cur.fetchone()["id"]
 
     if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("INSERT INTO articles(login_id, title, article_text) \
-            VALUES (%s, %s, %s);", (login_id, title, article_text))
+        cur.execute("""
+            INSERT INTO articles (login_id, title, article_text, is_favorite, is_public) 
+            VALUES (%s, %s, %s, %s, %s);
+        """, (login_id, title, article_text, is_favorite, is_public))
     else:
-        cur.execute("INSERT INTO articles(login_id, title, article_text) \
-            VALUES (?, ?, ?);", (login_id, title, article_text))
+        cur.execute("""
+            INSERT INTO articles (login_id, title, article_text, is_favorite, is_public) 
+            VALUES (?, ?, ?, ?, ?);
+        """, (login_id, title, article_text, is_favorite, is_public))
 
-    db_close(conn,cur)
+    db_close(conn, cur)
     return redirect('/lab5')
 
 @lab5.route('/lab5/list')
 def list():
     login = session.get('login')
-    if not login:
-        return redirect('/lab5/login')
 
     conn, cur = db_connect()
 
-    if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT id FROM users WHERE login=%s;", (login, ))
+    if login:
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("""
+                SELECT * FROM articles 
+                WHERE is_public=TRUE OR login_id = (SELECT id FROM users WHERE login=%s)
+                ORDER BY is_favorite DESC;
+            """, (login,))
+        else:
+            cur.execute("""
+                SELECT * FROM articles 
+                WHERE is_public=TRUE OR login_id = (SELECT id FROM users WHERE login=?)
+                ORDER BY is_favorite DESC;
+            """, (login,))
     else:
-        cur.execute("SELECT id FROM users WHERE login=?;", (login, ))
-    login_id = cur.fetchone()["id"]
 
-    if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT * FROM articles WHERE login_id=%s;", (login_id, ))
-    else:
-        cur.execute("SELECT * FROM articles WHERE login_id=?;", (login_id, ))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("""
+                SELECT * FROM articles WHERE is_public=TRUE
+                ORDER BY is_favorite DESC;
+            """)
+        else:
+            cur.execute("""
+                SELECT * FROM articles WHERE is_public=TRUE
+                ORDER BY is_favorite DESC;
+            """)
+
     articles = cur.fetchall()
 
     db_close(conn, cur)
+
     return render_template('/lab5/articles.html', articles=articles)
 
 @lab5.route('/lab5/logout')
@@ -221,3 +242,18 @@ def delete(article_id):
 
     db_close(conn, cur)
     return redirect('/lab5/list')
+
+@lab5.route('/lab5/users')
+def users():
+    conn, cur = db_connect()
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT login FROM users;")
+    else:
+        cur.execute("SELECT login FROM users;")
+    
+    users = cur.fetchall()
+
+    db_close(conn, cur)
+
+    return render_template('lab5/users.html', users=users)
