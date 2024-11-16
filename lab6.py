@@ -54,6 +54,12 @@ def api():
         else:
             cur.execute("SELECT number, tenant, price FROM offices;")
         
+         if current_app.config['DB_TYPE'] == 'sqlite':
+            offices = cur.fetchall()
+            offices = [dict(office) for office in offices]  # Преобразуем каждую строку Row в dict
+        else:
+            offices = cur.fetchall()  # Для PostgreSQL этот шаг не нужен, так как fetchall уже возвращает dict
+
         offices = cur.fetchall()
         db_close(conn, cur)
         
