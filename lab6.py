@@ -11,21 +11,26 @@ lab6 = Blueprint('lab6', __name__)
 load_dotenv()
 
 def db_connect():
-    if current_app.config['DB_TYPE'] == 'postgres':
+    db_type = current_app.config['DB_TYPE']
+
+    if db_type == 'postgres':
+        # Подключение к PostgreSQL, если нужно
         conn = psycopg2.connect(
-            host='127.0.0.1',
-            database='artem_konkin_knowledge_base',
-            user='artem_konkin_knowledge_base',
-            password='123'
+            host=os.getenv('DB_HOST', '127.0.0.1'),
+            database=os.getenv('DB_NAME'),
+            user=os.getenv('DB_USER'),
+            password=os.getenv('DB_PASSWORD')
         )
         cur = conn.cursor(cursor_factory=RealDictCursor)
-    else:
-        # Теперь мы получаем путь к базе данных внутри функции db_connect
-        db_path = os.path.join(current_app.instance_path, 'database.db')  # Используем current_app только здесь
+    elif db_type == 'sqlite':
+        # Подключение к SQLite
+        db_path = os.path.join(current_app.instance_path, 'database.db')  # Путь к базе данных
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
-
+    else:
+        raise Exception("Unsupported DB_TYPE: " + db_type)
+    
     return conn, cur
 
 def db_close(conn, cur):
