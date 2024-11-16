@@ -22,6 +22,7 @@ function getOfficeList() {
     .then(function(data) {
         const office_list = data.result;
         const ul = document.getElementById('office-list');
+        ul.innerHTML = '';
         for (let i = 0; i < office_list.length; i++) {
             const office = office_list[i];
             const li = document.createElement('li');
@@ -114,7 +115,6 @@ function cancelBooking(officeNumber) {
                     break;
             }
         } else {
-            // Обновляем список офисов после успешного снятия аренды
             getOfficeList();
         }
     });
