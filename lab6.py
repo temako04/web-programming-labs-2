@@ -49,18 +49,14 @@ def api():
     conn, cur = db_connect()
 
     if data['method'] == 'info':
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("SELECT number, tenant, price FROM offices;")
-        else:
-            cur.execute("SELECT number, tenant, price FROM offices;")
+        # Один блок запроса для обеих баз данных
+        cur.execute("SELECT number, tenant, price FROM offices;")
         
-         if current_app.config['DB_TYPE'] == 'sqlite':
-            offices = cur.fetchall()
-            offices = [dict(office) for office in offices]  # Преобразуем каждую строку Row в dict
-        else:
-            offices = cur.fetchall()  # Для PostgreSQL этот шаг не нужен, так как fetchall уже возвращает dict
-
+        # Получаем результаты и преобразуем в список словарей для JSON сериализации
         offices = cur.fetchall()
+        if current_app.config['DB_TYPE'] == 'sqlite':
+            offices = [dict(office) for office in offices]  # Преобразуем sqlite3.Row в dict
+        
         db_close(conn, cur)
         
         return {
