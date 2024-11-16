@@ -13,16 +13,19 @@ load_dotenv()
 
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
-        conn= psycopg2.connect(
-            host = '127.0.0.1',
-            database = 'artem_konkin_knowledge_base',
-            user = 'artem_konkin_knowledge_base',
-            password = '123'
+        conn = psycopg2.connect(
+            host='127.0.0.1',
+            database='artem_konkin_knowledge_base',
+            user='artem_konkin_knowledge_base',
+            password='123'
         )
-        cur = conn.cursor(cursor_factory = RealDictCursor)
+        cur = conn.cursor(cursor_factory=RealDictCursor)
     else:
         dir_path = path.dirname(path.realpath(__file__))
         db_path = path.join(dir_path, "database.db")
+        print(f"Database path: {db_path}")
+        if not os.path.exists(os.path.dirname(db_path)):
+            os.makedirs(os.path.dirname(db_path)) 
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
