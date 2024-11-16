@@ -32,6 +32,13 @@ function getOfficeList() {
             bookingButton.onclick = function() {booking(office.number)};
             li.appendChild(bookingButton);
 
+            if (office.tenant) {
+                const cancelButton = document.createElement('button');
+                cancelButton.innerText = 'Освободить';
+                cancelButton.onclick = function() {cancelBooking(office.number)};
+                li.appendChild(cancelButton);
+            }
+
             ul.appendChild(li);
         }
     });
@@ -47,14 +54,14 @@ function booking(officeNumber) {
     };
     fetch(url , {
         method: 'POST',
-        header: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(json)
     })
     .then(function(response) {
         return response.json()
     })
     .then(function(data) {
-        if(data.eror) {
+        if(data.error) {
             switch(data.error.code) {
                 case 1:
                     alert('Вы не авторизованы, пожалуйста, авторизуйтесь');
@@ -68,12 +75,26 @@ function booking(officeNumber) {
             }
         }
         else {
-            document.getElementById('office-list').innetHTML = '';
+            document.getElementById('office-list').innerHTML = '';
             getOfficeList();
         }
     });
 }
 
+function cancelBooking(officeNumber) {
+    const url = '/lab6/json-rpc-api/';
+    const json = {
+        'jsonrpc': '2.0',
+        'method': 'cancellation',
+        'params': officeNumber,
+        'id': Math.round(Math.random()*1000)
+    };
+    fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(json)
+    })
+}
 document.addEventListener('DOMContentLoaded', function() {
     getOfficeList();
 });
