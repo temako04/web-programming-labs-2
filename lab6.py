@@ -12,25 +12,19 @@ load_dotenv()
 
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
-        conn = psycopg2.connect(
-            host='127.0.0.1',
-            database='artem_konkin_knowledge_base',
-            user='artem_konkin_knowledge_base',
-            password='123'
+        conn= psycopg2.connect(
+            host = '127.0.0.1',
+            database = 'artem_konkin_knowledge_base',
+            user = 'artem_konkin_knowledge_base',
+            password = '123'
         )
-        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur = conn.cursor(cursor_factory = RealDictCursor)
     else:
-        # Путь к базе данных SQLite
         dir_path = path.dirname(path.realpath(__file__))
-        db_path = path.join(dir_path, "database.db")  # Путь к базе данных в той же директории
-        
-        try:
-            conn = sqlite3.connect(db_path)
-            conn.row_factory = sqlite3.Row
-            cur = conn.cursor()
-        except sqlite3.OperationalError as e:
-            print(f"Ошибка при подключении к базе данных: {e}")
-            raise
+        db_path = path.join(dir_path, "database.db")
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
 
     return conn, cur
 
