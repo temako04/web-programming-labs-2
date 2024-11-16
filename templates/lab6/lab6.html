@@ -35,7 +35,7 @@ function getOfficeList() {
             if (office.tenant) {
                 const cancelButton = document.createElement('button');
                 cancelButton.innerText = 'Освободить';
-                cancelButton.onclick = function() {cancelBooking(office.number)};
+                cancelButton.onclick = function() { cancelBooking(office.number) };
                 li.appendChild(cancelButton);
             }
 
@@ -87,17 +87,38 @@ function cancelBooking(officeNumber) {
         'jsonrpc': '2.0',
         'method': 'cancellation',
         'params': officeNumber,
-        'id': Math.round(Math.random()*1000)
+        'id': Math.round(Math.random() * 1000)
     };
     fetch(url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(json)
     })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        if (data.error) {
+            switch (data.error.code) {
+                case 1:
+                    alert('Вы не авторизованы, пожалуйста, авторизуйтесь');
+                    break;
+                case 3:
+                    alert('Офис не забронирован');
+                    break;
+                case 4:
+                    alert('Вы не можете снять аренду другого пользователя');
+                    break;
+                case -32601:
+                    alert('Странная ошибка');
+                    break;
+            }
+        } else {
+            // Обновляем список офисов после успешного снятия аренды
+            getOfficeList();
+        }
+    });
 }
-document.addEventListener('DOMContentLoaded', function() {
-    getOfficeList();
-});
 </script>
 {% endblock %}
 
