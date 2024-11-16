@@ -20,7 +20,7 @@ def db_connect():
             password='123'
         )
         cur = conn.cursor(cursor_factory=RealDictCursor)
-    else:
+    else: 
         dir_path = path.dirname(path.realpath(__file__))
         db_path = path.join(dir_path, "database.db")
         print(f"Database path: {db_path}")
@@ -49,13 +49,11 @@ def api():
     conn, cur = db_connect()
 
     if data['method'] == 'info':
-        # Один блок запроса для обеих баз данных
         cur.execute("SELECT number, tenant, price FROM offices;")
         
-        # Получаем результаты и преобразуем в список словарей для JSON сериализации
         offices = cur.fetchall()
         if current_app.config['DB_TYPE'] == 'sqlite':
-            offices = [dict(office) for office in offices]  # Преобразуем sqlite3.Row в dict
+            offices = [dict(office) for office in offices]
         
         db_close(conn, cur)
         
@@ -91,7 +89,11 @@ def api():
                 'id': id
             }
         
-        cur.execute("UPDATE offices SET tenant=%s WHERE number=%s;", (login, office_number))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("UPDATE offices SET tenant=%s WHERE number=%s;", (login, office_number))
+        else:
+            cur.execute("UPDATE offices SET tenant=? WHERE number=?;", (login, office_number))
+        
         db_close(conn, cur)
         
         return {
@@ -125,7 +127,11 @@ def api():
                 'id': id
             }
 
-        cur.execute("UPDATE offices SET tenant=NULL WHERE number=%s;", (office_number,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("UPDATE offices SET tenant=NULL WHERE number=%s;", (office_number,))
+        else:
+            cur.execute("UPDATE offices SET tenant=NULL WHERE number=?;", (office_number,))
+        
         db_close(conn, cur)
 
         return {
