@@ -1,15 +1,14 @@
-from flask import Blueprint, redirect, url_for, render_template, request, make_response, redirect, session, current_app
+import os
+from flask import Blueprint, redirect, url_for, render_template, request, make_response, session, current_app
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from werkzeug.security import check_password_hash, generate_password_hash
 import sqlite3
-from os import path
 from dotenv import load_dotenv
 
 lab6 = Blueprint('lab6', __name__)
 
 load_dotenv()
-
 
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -21,25 +20,22 @@ def db_connect():
         )
         cur = conn.cursor(cursor_factory=RealDictCursor)
     else:
-        dir_path = path.dirname(path.realpath(__file__))
-        db_path = path.join(dir_path, "database.db")
+        # Теперь мы получаем путь к базе данных внутри функции db_connect
+        db_path = os.path.join(current_app.instance_path, 'database.db')  # Используем current_app только здесь
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
 
     return conn, cur
 
-
 def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
 
-
 @lab6.route('/lab6/')
 def main():
     return render_template('/lab6/lab6.html')
-
 
 @lab6.route('/lab6/json-rpc-api/', methods=['POST'])
 def api():
