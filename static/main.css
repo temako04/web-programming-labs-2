@@ -115,3 +115,78 @@ footer {
     width: 200px;
     margin-top: 10px;
 }
+
+#office-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#office-list li {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+#office-list li button {
+    padding: 8px 12px;
+    margin-left: 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#office-list li button:hover {
+    background-color: #45a049;
+}
+
+#office-list li button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#office-list li button.cancel {
+    background-color: #f44336;
+}
+
+#office-list li button.cancel:hover {
+    background-color: #d32f2f;
+}
+
+#total-cost {
+    background-color: #f1f1f1;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
