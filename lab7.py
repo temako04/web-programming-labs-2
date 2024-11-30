@@ -1,11 +1,4 @@
-import os
-from flask import Blueprint, redirect, url_for, render_template, request, make_response, session, current_app
-import psycopg2
-from psycopg2.extras import RealDictCursor
-from werkzeug.security import check_password_hash, generate_password_hash
-import sqlite3
-from os import path
-from dotenv import load_dotenv
+from flask import Blueprint, redirect, url_for, render_template, request, make_response, session, current_app, abort
 
 lab7 = Blueprint('lab7', __name__)
 
@@ -71,6 +64,8 @@ def get_films():
     return films
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
-def get_films(id):
+def get_film(id):
+    if id < 0 or id >= len(films):
+        abort(404)
+    
     return films[id]
-
