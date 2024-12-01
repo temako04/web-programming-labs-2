@@ -87,6 +87,11 @@ function sendFilm() {
     const url = `/lab7/rest-api/films/${id}`;
     const method = id === '' ? 'POST' : 'PUT';
 
+    document.getElementById('title-ru-error').innerText = '';
+    document.getElementById('title-error').innerText = '';
+    document.getElementById('year-error').innerText = '';
+    document.getElementById('description-error').innerText = '';
+
     fetch(url, {
         method: method,
         headers: {"Content-Type": "application/json"},
@@ -101,8 +106,18 @@ function sendFilm() {
         return resp.json();
     })
     .then(function(errors) {
-        if(errors.description)
+        if (errors.title_ru) {
+            document.getElementById('title-ru-error').innerText = errors.title_ru;
+        }
+        if (errors.title) {
+            document.getElementById('title-error').innerText = errors.title;
+        }
+        if (errors.year) {
+            document.getElementById('year-error').innerText = errors.year;
+        }
+        if (errors.description) {
             document.getElementById('description-error').innerText = errors.description;
+        }
     });
 }
 
