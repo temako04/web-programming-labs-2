@@ -14,8 +14,8 @@ function fillFilmList() {
             let tdYear = document.createElement('td');
             let tdActions = document.createElement('td');
 
-            tdTitle.innerText = films[i].title == films[i].title_ru ? '': films[i].title;
-            tdTitleRus.innerText = films[i].title_ru;
+            tdTitleRus.innerHTML = `<i>(${films[i].title})</i>`;
+            tdTitle.innerText = films[i].title_ru;
             tdYear.innerText = films[i].year;
 
             let editButton = document.createElement('button');
