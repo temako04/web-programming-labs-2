@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block lab %}Расчетно-Графическое Задание{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='rgz/rgz.js') }}"></script>
+<style>
+    #storage-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.storage-cell {
+    padding: 20px;
+    border: 1px solid #ddd;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.storage-cell.available {
+    background-color: #d4f1c7;
+}
+
+.storage-cell.reserved {
+    background-color: #f7a6a6;
+}
+
+#user-info {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#user-info a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+#user-info button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+</style>
+
+{% endblock %}
+
+{% block main %}
+
+<h1>Камера хранения</h1>
+
+<div id="user-info">
+    {% if session['login'] %}
+        <p>Вы вошли как: {{ session['login'] }}</p>
+        <button onclick="logout()">Выйти</button>
+    {% else %}
+        <a href="/lab5/login">Войти</a> | <a href="/lab5/register">Зарегистрироваться</a>
+    {% endif %}
+</div>
+
+<div id="storage-container"></div>
+
+{% endblock %}

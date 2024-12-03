@@ -112,3 +112,4 @@ def delete_film(id):
     cur.execute("DELETE FROM films WHERE id = %s;", (id,))
     db_close(conn, cur)
     return '', 204
+
