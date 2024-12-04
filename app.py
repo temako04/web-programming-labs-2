@@ -7,6 +7,7 @@ from lab5 import lab5
 from lab6 import lab6
 from lab7 import lab7
 from rgz import rgz
+from test import test
 import os
 from dotenv import load_dotenv
 
@@ -23,6 +24,7 @@ app.register_blueprint(lab5)
 app.register_blueprint(lab6)
 app.register_blueprint(lab7)
 app.register_blueprint(rgz)
+app.register_blueprint(test)
 
 @app.route("/")
 @app.route("/index")
@@ -52,6 +54,7 @@ def menu():
                 <li><a href="/lab6">Шестая лабораторная</a></li>
                 <li><a href="/lab7">Cедьмая лабораторная</a></li>
                 <li><a href="/rgz">РГЗ</a></li>
+                <li><a href="/test">Тест</a></li>
             </ol>
 
         <footer>

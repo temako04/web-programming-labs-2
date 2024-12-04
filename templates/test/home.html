@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block lab %}Мессенджер{% endblock %}
+
+{% block main %}
+<h1>Мессенджер</h1>
+<ul>
+    {% for user in users %}
+        <a href="{{ url_for('test.chat', receiver_id=user['id']) }}">{{ user['login'] }}</a>
+    {% endfor %}
+</ul>
+
+{% if session['login'] == 'admin' %}
+    <br>
+    <a href="{{ url_for('test.admin') }}">
+        <button>Админ панель</button>
+    </a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block lab %}Чат с {{ receiver['login'] }}{% endblock %}
+
+{% block main %}
+<h1>Чат с {{ receiver['login'] }}</h1>
+<div>
+    {% for message in messages %}
+        <div>
+            <b>{{ message['login'] }}:</b> {{ message['message_text'] }}
+            {% if message['login'] == session['login'] or message['login'] == receiver['login'] %}
+                <a href="{{ url_for('test.delete_message', message_id=message['id']) }}">Удалить</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+<form method="POST">
+    <textarea name="message" required></textarea>
+    <button type="submit">Отправить</button>
+</form>
+{% endblock %}
