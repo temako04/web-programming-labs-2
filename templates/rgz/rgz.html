@@ -3,8 +3,10 @@
 {% block lab %}Расчетно-Графическое Задание{% endblock %}
 
 {% block script %}
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <script src="{{ url_for('static', filename='rgz/rgz.js') }}"></script>
 <style>
+    
     #storage-container {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
