@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadStorageCells();
 });
 
-let cellsState = [];  // Хранение состояния ячеек
+let cellsState = [];  //Хранение состояния ячеек
 
 function loadStorageCells() {
     fetch('/api/storage_cells')
@@ -11,9 +11,9 @@ function loadStorageCells() {
     })
     .then(function(cells) {
         const container = document.getElementById('storage-container');
-        container.innerHTML = '';  // Очищаем контейнер перед отрисовкой
+        container.innerHTML = '';  //Очищаем контейнер перед отрисовкой
 
-        cellsState = cells;  // Обновляем состояние ячеек
+        cellsState = cells;  //Обновляем состояние ячеек
 
         cells.forEach(function(cell) {
             const cellDiv = createCellDiv(cell);
@@ -65,7 +65,7 @@ function reserveCell(cellId) {
 
             // Если ошибка 401 (неавторизован), не обновляем состояние ячейки
             if (data.code === 401) {
-                return;  // Прерываем выполнение функции
+                return;
             }
         } else {
             alert(data.message);  // Сообщение об успешном бронировании

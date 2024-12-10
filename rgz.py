@@ -28,7 +28,7 @@ def main():
 @rgz.route('/api/storage_cells', methods=['GET'])
 def get_storage_cells():
     conn, cur = db_connect()
-    cur.execute("SELECT * FROM storage_cells;")
+    cur.execute("SELECT * FROM storage_cells ORDER BY id;")
     cells = cur.fetchall()
     db_close(conn, cur)
     return jsonify(cells)

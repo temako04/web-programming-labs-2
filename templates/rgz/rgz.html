@@ -6,28 +6,37 @@
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <script src="{{ url_for('static', filename='rgz/rgz.js') }}"></script>
 <style>
-    
-    #storage-container {
+#storage-container {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    gap: 10px;
+    gap: 15px;
     margin-top: 20px;
 }
 
 .storage-cell {
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 2px solid #ccc;
+    border-radius: 8px;
     text-align: center;
     cursor: pointer;
     font-size: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.storage-cell:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .storage-cell.available {
     background-color: #d4f1c7;
+    color: #2f6b2f;
 }
 
 .storage-cell.reserved {
     background-color: #f7a6a6;
+    color: #8a0000;
 }
 
 #user-info {
@@ -40,13 +49,23 @@
     color: #007bff;
 }
 
+#user-info a:hover {
+    text-decoration: underline;
+}
+
 #user-info button {
     background-color: #007bff;
     color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    border-radius: 5px;
 }
+
+#user-info button:hover {
+    background-color: #0056b3;
+}
+
 </style>
 
 {% endblock %}
