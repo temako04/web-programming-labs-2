@@ -1,18 +1,33 @@
 import os
-from flask import Blueprint, render_template, request, jsonify, abort, session
+from flask import Blueprint, redirect, url_for, render_template, request, make_response, session, current_app
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from werkzeug.security import check_password_hash, generate_password_hash
+import sqlite3
+from os import path
+from dotenv import load_dotenv
 
 rgz = Blueprint('rgz', __name__)
 
 def db_connect():
-    conn = psycopg2.connect(
-        host='127.0.0.1',
-        database='artem_konkin_knowledge_base',
-        user='artem_konkin_knowledge_base',
-        password='123'
-    )
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    if current_app.config['DB_TYPE'] == 'postgres':
+        conn = psycopg2.connect(
+            host='127.0.0.1',
+            database='artem_konkin_knowledge_base',
+            user='artem_konkin_knowledge_base',
+            password='123'
+        )
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+    else: 
+        dir_path = path.dirname(path.realpath(__file__))
+        db_path = path.join(dir_path, "database.db")
+        print(f"Database path: {db_path}")
+        if not os.path.exists(os.path.dirname(db_path)):
+            os.makedirs(os.path.dirname(db_path)) 
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+
     return conn, cur
 
 def db_close(conn, cur):
@@ -28,7 +43,10 @@ def main():
 @rgz.route('/api/storage_cells', methods=['GET'])
 def get_storage_cells():
     conn, cur = db_connect()
-    cur.execute("SELECT * FROM storage_cells ORDER BY id;")
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT * FROM storage_cells ORDER BY id;")
+    else:
+        cur.execute("SELECT * FROM storage_cells ORDER BY id;")
     cells = cur.fetchall()
     db_close(conn, cur)
     return jsonify(cells)
@@ -43,14 +61,20 @@ def reserve_cell(cell_id):
     conn, cur = db_connect()
 
     # Получаем информацию о пользователе
-    cur.execute("SELECT id FROM users WHERE login = %s;", (user_login,))
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT id FROM users WHERE login = %s;", (user_login,))
+    else:
+        cur.execute("SELECT id FROM users WHERE login = ?;", (user_login,))
     user = cur.fetchone()
     if not user:
         db_close(conn, cur)
         return jsonify({'error': 'Пользователь не найден'}), 404
     
     # Проверяем, не забронирована ли ячейка
-    cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+    else:
+        cur.execute("SELECT * FROM storage_cells WHERE id = ?;", (cell_id,))
     cell = cur.fetchone()
     if not cell:
         db_close(conn, cur)
@@ -61,10 +85,14 @@ def reserve_cell(cell_id):
         return jsonify({'error': 'Эта ячейка уже забронирована'}), 400
     
     # Бронирование ячейки
-    cur.execute("UPDATE storage_cells SET is_reserved = TRUE, reserved_by = %s WHERE id = %s;", (user['id'], cell_id))
-    cur.execute("INSERT INTO reservations (user_id, cell_id) VALUES (%s, %s);", (user['id'], cell_id))
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("UPDATE storage_cells SET is_reserved = TRUE, reserved_by = %s WHERE id = %s;", (user['id'], cell_id))
+        cur.execute("INSERT INTO reservations (user_id, cell_id) VALUES (%s, %s);", (user['id'], cell_id))
+    else:
+        cur.execute("UPDATE storage_cells SET is_reserved = 1, reserved_by = ? WHERE id = ?;", (user['id'], cell_id))
+        cur.execute("INSERT INTO reservations (user_id, cell_id) VALUES (?, ?);", (user['id'], cell_id))
+    
     db_close(conn, cur)
-
     return jsonify({'message': 'Ячейка успешно забронирована'}), 200
 
 # Отмена бронирования
@@ -77,16 +105,24 @@ def cancel_reservation(cell_id):
     conn, cur = db_connect()
 
     # Получаем информацию о пользователе
-    cur.execute("SELECT id FROM users WHERE login = %s;", (user_login,))
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT id FROM users WHERE login = %s;", (user_login,))
+    else:
+        cur.execute("SELECT id FROM users WHERE login = ?;", (user_login,))
     user = cur.fetchone()
     if not user:
         db_close(conn, cur)
         return jsonify({'error': 'Пользователь не найден', 'code': 2}), 404
 
     # Проверяем, забронирована ли ячейка этим пользователем
-    cur.execute("""
-        SELECT * FROM storage_cells WHERE id = %s AND reserved_by = %s;
-    """, (cell_id, user['id']))
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("""
+            SELECT * FROM storage_cells WHERE id = %s AND reserved_by = %s;
+        """, (cell_id, user['id']))
+    else:
+        cur.execute("""
+            SELECT * FROM storage_cells WHERE id = ? AND reserved_by = ?;
+        """, (cell_id, user['id']))
     cell = cur.fetchone()
     if not cell:
         db_close(conn, cur)
@@ -94,8 +130,13 @@ def cancel_reservation(cell_id):
 
     # Отмена бронирования
     try:
-        cur.execute("UPDATE storage_cells SET is_reserved = FALSE, reserved_by = NULL WHERE id = %s;", (cell_id,))
-        cur.execute("DELETE FROM reservations WHERE user_id = %s AND cell_id = %s;", (user['id'], cell_id))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("UPDATE storage_cells SET is_reserved = FALSE, reserved_by = NULL WHERE id = %s;", (cell_id,))
+            cur.execute("DELETE FROM reservations WHERE user_id = %s AND cell_id = %s;", (user['id'], cell_id))
+        else:
+            cur.execute("UPDATE storage_cells SET is_reserved = 0, reserved_by = NULL WHERE id = ?;", (cell_id,))
+            cur.execute("DELETE FROM reservations WHERE user_id = ? AND cell_id = ?;", (user['id'], cell_id))
+
         db_close(conn, cur)
         return jsonify({'message': 'Бронирование успешно отменено'}), 200
     except Exception as e:
