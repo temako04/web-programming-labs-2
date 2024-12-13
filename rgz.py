@@ -50,6 +50,9 @@ def get_storage_cells():
     else:
         cur.execute("SELECT * FROM storage_cells ORDER BY id;")
     cells = cur.fetchall()
+
+    cells_list = [dict(cell) for cell in cells]
+
     db_close(conn, cur)
     return jsonify(cells)
 
