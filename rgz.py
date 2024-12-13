@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, redirect, url_for, render_template, request, make_response, session, current_app
+from flask import Blueprint, render_template, request, jsonify, abort, session, current_app
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -8,6 +8,8 @@ from os import path
 from dotenv import load_dotenv
 
 rgz = Blueprint('rgz', __name__)
+
+load_dotenv()
 
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -136,7 +138,7 @@ def cancel_reservation(cell_id):
         else:
             cur.execute("UPDATE storage_cells SET is_reserved = 0, reserved_by = NULL WHERE id = ?;", (cell_id,))
             cur.execute("DELETE FROM reservations WHERE user_id = ? AND cell_id = ?;", (user['id'], cell_id))
-
+            
         db_close(conn, cur)
         return jsonify({'message': 'Бронирование успешно отменено'}), 200
     except Exception as e:
