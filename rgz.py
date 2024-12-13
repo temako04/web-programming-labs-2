@@ -54,7 +54,7 @@ def get_storage_cells():
     cells_list = [dict(cell) for cell in cells]
 
     db_close(conn, cur)
-    return jsonify(cells)
+    return jsonify(cells_list)
 
 # Бронирование ячейки
 @rgz.route('/api/reserve_cell/<int:cell_id>', methods=['POST'])
