@@ -65,11 +65,8 @@ def login():
 def article_list():
     return "Cписок статей"
 
-@lab8.route('/lab8/create', methods=['GET', 'POST'])
-def create():
-    return render_template('lab8/create_article.html')
-
-
 @lab8.route('/lab8/logout')
+@login_required
 def logout():
-    return redirect('/lab8')
+    logout_user()
+    return redirect('/lab8/')
