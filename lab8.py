@@ -1,7 +1,8 @@
 from flask import Blueprint, redirect, url_for, render_template, request, make_response, redirect, session, current_app
 from db import db
 from db.models import users, articles
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, login_required, current_user
 lab8 = Blueprint('lab8', __name__)
 
 @lab8.route('/lab8/')
@@ -34,25 +35,40 @@ def register():
     return redirect('/lab8/')
 
 
-@lab8.route('/lab8/success')
-def success():
-    return render_template('/lab8/success.html')
-
 @lab8.route('/lab8/login', methods = ['GET', 'POST'])
 def login():
-    return render_template('lab8/success_login.html')
+    if request.method == 'GET':
+        return render_template('lab8/login.html')
 
-@lab8.route('/lab8/success_login')
-def success_login():
-    return render_template('/lab8/success_login.html')
+    login_form = request.form.get('login')
+    password_form = request.form.get('password')
+
+    if not login_form:
+        return render_template('lab8/login.html', error='Логин не может быть пустым')
+
+    if not password_form:
+        return render_template('lab8/login.html', error='Пароль не может быть пустым')
+
+    user = users.query.filter_by(login = login_form).first()
+
+    if user:
+        if check_password_hash(user.password, password_form):
+            login_user(user, remember = False)
+            return redirect('/lab8/')
+
+    return render_template('/lab8/login.html',
+                            error='Ошибка входа: логин и/или пароль неверны')
+
+
+@lab8.route('/lab8/articles/')
+@login_required
+def article_list():
+    return "Cписок статей"
 
 @lab8.route('/lab8/create', methods=['GET', 'POST'])
 def create():
     return render_template('lab8/create_article.html')
 
-@lab8.route('/lab8/list')
-def list():
-    return render_template('/lab8/articles.html')
 
 @lab8.route('/lab8/logout')
 def logout():
