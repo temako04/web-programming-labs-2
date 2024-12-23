@@ -37,6 +37,6 @@ def create():
 def list():
     return render_template('/lab8/articles.html')
 
-@lab8.route('/llab8ab5/logout')
+@lab8.route('/lab8/logout')
 def logout():
     return redirect('/lab8')
