@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block lab %}Публичные статьи{% endblock %}
+
+{% block main %}
+    <h1>Публичные статьи</h1>
+    {% if articles %}
+        <ul>
+            {% for article in articles %}
+                <li>
+                    <strong>{{ article.title }}</strong>
+                    <p>{{ article.article_text }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нет публичных статей.</p>
+    {% endif %}
+{% endblock %}

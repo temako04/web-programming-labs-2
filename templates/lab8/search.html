@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block lab %}Поиск статей{% endblock %}
+
+{% block main %}
+    <h1>Поиск статей</h1>
+    <form action="/lab8/search" method="post">
+        <div>
+            <label for="query">Введите строку для поиска:</label>
+            <input type="text" name="query" id="query">
+        </div>
+        <button type="submit">Поиск</button>
+    </form>
+{% endblock %}

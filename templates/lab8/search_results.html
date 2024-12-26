@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block lab %}Результаты поиска{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска</h1>
+    
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% elif results %}
+        <ul>
+            {% for article in results %}
+                <li>
+                    <strong>{{ article.title }}</strong><br>
+                    <p>{{ article.article_text }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Статьи не найдены.</p>
+    {% endif %}
+{% endblock %}
