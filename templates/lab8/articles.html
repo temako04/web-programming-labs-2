@@ -1,86 +1,24 @@
 {% extends "base.html" %}
 
-{% block lab %}Лабораторная работа 5{% endblock %}
+{% block lab %}Статьи{% endblock %}
 
 {% block main %}
-<style>
-    .page-title {
-        text-align: center;
-        font-size: 36px;
-        margin-bottom: 30px;
-        color: #333;
-    }
-
-    .articles-list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    .article-container {
-        background-color: #f8f8f8;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        width: 80%;
-        max-width: 800px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .article-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .article-text {
-        font-size: 18px;
-        color: #555;
-        font-style: italic;
-        margin-bottom: 20px;
-        line-height: 1.6;
-    }
-
-    .favorite-badge {
-        background-color: #ffcc00;
-        color: #fff;
-        padding: 5px 10px;
-        font-size: 14px;
-        font-weight: bold;
-        border-radius: 5px;
-        display: inline-block;
-        margin-bottom: 15px;
-    }
-
-    .article-actions {
-        text-align: center;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 5px;
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 5px;
-        font-size: 16px;
-        text-decoration: none;
-    }
-
-    .btn:hover {
-        background-color: #45a049;
-    }
-
-    .no-articles-message {
-        text-align: center;
-        font-size: 18px;
-        color: #888;
-        margin-top: 40px;
-        font-weight: bold;
-    }
-</style>
-    <h1 class="page-title">Статьи</h1>
-
+    <h1>Ваши статьи</h1>
+    <ul>
+        {% for article in articles %}
+            <li>
+                <strong>{{ article.title }}</strong><br>
+                {{ article.article_text }}<br>
+                <small>
+                    Избранное: {{ 'Да' if article.is_favorite else 'Нет' }}<br>
+                    Публичная: {{ 'Да' if article.is_public else 'Нет' }}<br>
+                    <a href="{{ url_for('lab8.edit_article', article_id=article.id) }}">Редактировать</a>
+                </small>
+                <form action="{{ url_for('lab8.delete_article', article_id=article.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту статью?')">Удалить</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/lab8/create">Создать новую статью</a>
 {% endblock %}

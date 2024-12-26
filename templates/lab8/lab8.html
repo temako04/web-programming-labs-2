@@ -24,7 +24,7 @@
         }
     </style>
 
-    <p>Пользователь: anonymous </p>
+    <p>Пользователь: {{ current_user.login if current_user.is_authenticated else 'anonymous' }}</p>
     
     <div class="buttons-container">
         <a href="/lab8/login" class="btn">Вход</a>

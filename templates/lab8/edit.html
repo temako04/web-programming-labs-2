@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block lab %}Редактирование статьи{% endblock %}
+
+{% block main %}
+    <h1>Редактировать статью</h1>
+    <form action="{{ url_for('lab8.edit_article', article_id=article.id) }}" method="post">
+        <div>
+            <label>
+                Заголовок:
+                <input type="text" name="title" value="{{ article.title }}" required>
+            </label>
+        </div>
+        
+        <div>
+            <label>
+                Текст статьи:
+                <textarea name="article_text" required>{{ article.article_text }}</textarea>
+            </label>
+        </div>
+        
+        <div>
+            <label>
+                <input type="checkbox" name="is_favorite" {% if article.is_favorite %}checked{% endif %}> Избранное
+            </label>
+        </div>
+        
+        <div>
+            <label>
+                <input type="checkbox" name="is_public" {% if article.is_public %}checked{% endif %}> Опубликовано
+            </label>
+        </div>
+
+        <button type="submit">Сохранить изменения</button>
+        
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
+    </form>
+{% endblock %}
