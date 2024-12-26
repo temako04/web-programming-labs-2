@@ -8,6 +8,7 @@ from lab6 import lab6
 from lab7 import lab7
 from rgz import rgz
 from lab8 import lab8
+from lab9 import lab9
 import os
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
@@ -58,6 +59,7 @@ app.register_blueprint(lab6)
 app.register_blueprint(lab7)
 app.register_blueprint(rgz)
 app.register_blueprint(lab8)
+app.register_blueprint(lab9)
 
 @app.route("/")
 @app.route("/index")
@@ -87,6 +89,7 @@ def menu():
                 <li><a href="/lab6">Шестая лабораторная</a></li>
                 <li><a href="/lab7">Cедьмая лабораторная</a></li>
                 <li><a href="/lab8">Восьмая лабораторная</a></li>
+                <li><a href="/lab9">Девятая лабораторная</a></li>
                 <li><a href="/rgz">РГЗ</a></li>
             </ol>
 
