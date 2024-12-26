@@ -4,6 +4,9 @@ lab9 = Blueprint('lab9', __name__)
 
 @lab9.route('/lab9/', methods=['GET', 'POST'])
 def lab():
+    if 'name' in session and 'age' in session and 'gender' in session and 'preference1' in session and 'preference2' in session:
+        return redirect(url_for('lab9.congratulations'))
+    
     if request.method == 'POST':
         session['name'] = request.form.get('name')
         return redirect(url_for('lab9.age'))
@@ -39,6 +42,9 @@ def preference2():
 
 @lab9.route('/lab9/congratulations')
 def congratulations():
+    if 'name' not in session or 'age' not in session or 'gender' not in session or 'preference1' not in session or 'preference2' not in session:
+        return redirect(url_for('lab9.lab'))
+    
     name = session.get('name')
     age = session.get('age')
     gender = session.get('gender')
@@ -66,3 +72,8 @@ def congratulations():
             gift = "Вот тебе подарок — произведение искусства."
 
     return render_template('lab9/congratulations.html', greeting=greeting, gift=gift, image=image)
+
+@lab9.route('/lab9/reset')
+def reset():
+    session.clear()
+    return redirect(url_for('lab9.lab'))

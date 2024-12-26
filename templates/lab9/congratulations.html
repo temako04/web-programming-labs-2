@@ -7,4 +7,6 @@
     <p>{{ greeting }}</p>
     <p>{{ gift }}</p>
     <img src="{{ url_for('static', filename='images/' + image) }}" alt="Подарок">
+    <br><br>
+    <a href="{{ url_for('lab9.reset') }}">Сбросить и ввести данные заново</a>
 {% endblock %}
