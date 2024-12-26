@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+
+{% block main %}
+    <h1>Выберите ваш пол</h1>
+    <form method="POST">
+        <label><input type="radio" name="gender" value="male" required> Мужчина</label>
+        <label><input type="radio" name="gender" value="female" required> Женщина</label>
+        <button type="submit">Далее</button>
+    </form>
+{% endblock %}

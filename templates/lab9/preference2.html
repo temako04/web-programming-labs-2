@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+
+{% block main %}
+    <h1>Выберите предпочтение</h1>
+    <form method="POST">
+        {% if session['preference1'] == 'tasty' %}
+            <label><input type="radio" name="preference2" value="sweet" required> Сладкое</label>
+            <label><input type="radio" name="preference2" value="savory" required> Сытное</label>
+        {% else %}
+            <label><input type="radio" name="preference2" value="beautiful" required> Красивое</label>
+            <label><input type="radio" name="preference2" value="art" required> Искусство</label>
+        {% endif %}
+        <button type="submit">Далее</button>
+    </form>
+{% endblock %}

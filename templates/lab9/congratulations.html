@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+
+{% block main %}
+    <h1>Поздравление</h1>
+    <p>{{ greeting }}</p>
+    <p>{{ gift }}</p>
+    <img src="{{ url_for('static', filename='images/' + image) }}" alt="Подарок">
+{% endblock %}
